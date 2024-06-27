@@ -1,11 +1,14 @@
 <template>
   <li class="note-item">
     <div class="note-item__text">{{ text }}</div>
-    <small>{{ computeCharacters }} </small>
+    <div class="note-item__info">
+      <small>{{ computeDateNote }} created</small>
+      <small>{{ computeCharacters }}</small>
+    </div>
     <hr />
     <div class="note-item__buttons">
       <button>
-        <RouterLink :to="linkEdit">Edit</RouterLink>
+        <RouterLink :to="computeLinkEdit">Edit</RouterLink>
       </button>
       <hr />
       <button @click="handleModal">Delete</button>
@@ -13,13 +16,13 @@
     <Teleport to="body">
       <BaseModal
         v-if="controlModal"
-        :active="controlModal"
         title="Delete Note"
+        :active="controlModal"
         @update:control-modal="controlModal = $event"
       >
         <template #description>{{ description }}</template>
         <template #footer>
-          <!-- <BaseButton @click="cancel" class="btn-white">Cancel</BaseButton> -->
+          <BaseButton @click="closeModal" class="btn-white">Cancel</BaseButton>
           <BaseButton @click="notes.deleteNote(id)" class="btn-red"
             >Delete</BaseButton
           >
@@ -32,17 +35,33 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useNotesStore } from "../../store/notes";
+import { useDateFormat, useNow } from "@vueuse/core";
 
-const { id, text, characters } = defineProps(["id", "text", "characters"]);
+const { id, date, text, characters } = defineProps([
+  "id",
+  "date",
+  "text",
+  "characters",
+]);
+const notes = useNotesStore();
 const controlModal = ref(false);
 const description = ref("Are you sure you want to delete this note?");
-const notes = useNotesStore();
 
-const linkEdit = computed(() => `/notes/${id}`);
+const computeLinkEdit = computed(() => `/notes/${id}`);
 
 const computeCharacters = computed(() => {
   return `${characters} ${characters > 1 ? "characters" : "character"}`;
 });
+
+const computeDateNote = computed(() => {
+  const dateObj = new Date(+date);
+  const finalDate = useDateFormat(dateObj, "YYYY-MM-DD @ HH:mm").value;
+  return finalDate;
+});
+
+function closeModal() {
+  controlModal.value = false;
+}
 
 function handleModal() {
   scrollToTop();
@@ -69,12 +88,16 @@ div.note-item__text {
   font-size: 18px;
 }
 
+div.note-item__info {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 15px;
+  padding: 5px 15px;
+}
+
 small {
-  align-self: end;
-  padding: 5px 10px;
   font-size: 16px;
   color: var(--grey);
-  margin-block-end: 15px;
 }
 
 hr {

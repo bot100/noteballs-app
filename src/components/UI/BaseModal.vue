@@ -24,6 +24,7 @@
 
 <script setup>
 import BaseButton from "./BaseButton.vue";
+import { onMounted, onUnmounted } from "vue";
 
 const { active, title } = defineProps(["active", "title"]);
 const emit = defineEmits(["update:control-modal"]);
@@ -35,6 +36,20 @@ const updateProp = (newValue) => {
 function closeModal() {
   updateProp(false);
 }
+
+const handleKeyBoard = (e) => {
+  if (e.key === "Escape") {
+    updateProp(false);
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("keyup", handleKeyBoard);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keyup", handleKeyBoard);
+});
 </script>
 
 <style scoped>

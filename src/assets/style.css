@@ -30,12 +30,12 @@ nav,
 label {
   font-size: 20px;
   margin-block-end: 10px;
-  color: var(--white);
 }
 
-label.warning {
-  font-weight: bold;
-  color: var(--red);
+input {
+  width: 100%;
+  font-size: 18px;
+  padding: 10px;
 }
 
 textarea {
@@ -44,4 +44,21 @@ textarea {
   border-radius: 5px;
   padding: 10px;
   font-size: 20px;
+}
+
+/* Animations */
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s linear;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
 }

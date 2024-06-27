@@ -16,7 +16,7 @@ defineEmits(["toggle"]);
   z-index: 3;
 }
 
-@media (width < 400px) {
+@media (width < 800px) {
   .burger-menu {
     display: block;
     transition: scale 0.3s ease-in-out;
