@@ -73,7 +73,7 @@ export const useAuthStore = defineStore("accounts", {
           const user = userCredential.user;
         })
         .catch((error) => {
-          console.log(error.message);
+          alert(`${error.message} Re-login!`);
         });
     },
   },
