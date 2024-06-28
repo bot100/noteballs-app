@@ -18,7 +18,7 @@ import { ref } from "vue";
 import Login from "./Login.vue";
 import Register from "./Register.vue";
 
-const loginActive = ref(false);
+const loginActive = ref(true);
 const registerActive = ref(false);
 const activeModal = ref("login");
 
