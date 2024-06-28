@@ -11,6 +11,8 @@
 <style scoped>
 label {
   text-align: center;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 label.tips {

@@ -1,7 +1,7 @@
 <template>
   <BaseForm class="form-blue form-edit" @submit.prevent="handleSubmit">
     <BaseFormItem class="form-item">
-      <label class="label-title" for="note">{{ title }}</label>
+      <label :class="{ warning: activeWarning }">{{ title }}</label>
       <textarea name="note" id="note" v-model="textNew">{{ textNew }}</textarea>
     </BaseFormItem>
     <BaseFormItem class="form-item">
@@ -15,7 +15,7 @@
 import { useNotesStore } from "../../store/notes.js";
 import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
 import { useCancel } from "../../hooks/useCancel.js";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -29,6 +29,7 @@ const currentNote = notes.getNotes.find((note) => note.id === currentID);
 const { text: textNote } = currentNote || { text: "default" };
 
 const textNew = ref(textNote);
+const activeWarning = ref(null);
 
 function beforeRouteLeave(to, from, next) {
   if (currentNote && currentNote.text === textNew) {
@@ -56,9 +57,8 @@ function handleSubmit(e) {
     if (textNew.value !== textNote) {
       updateNote(currentID);
     } else {
-      title.value = "Change text";
-      const labelTitle = document.querySelector(".label-title");
-      labelTitle.classList.add("warning");
+      title.value = "Change text!";
+      activeWarning.value = true;
       return;
     }
   } else {
@@ -77,5 +77,12 @@ onBeforeRouteLeave(beforeRouteLeave);
 
 label {
   color: var(--white);
+  font-weight: bold;
+  text-align: center;
+  font-size: 24px;
+}
+
+label.warning {
+  color: var(--red);
 }
 </style>
